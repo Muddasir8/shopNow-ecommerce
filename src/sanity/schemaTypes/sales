@@ -1,0 +1,89 @@
+import {defineType} from 'sanity',
+import { TagIcon } from '@sanity/icons',
+
+export const sale = defineType({
+  name: 'sale',
+  title: 'Sale',
+  type: 'document',
+  icon: TagIcon,
+  fields: [
+    {
+      name: 'saleId',
+      title: 'Sale ID',
+      type: 'string',
+      description: 'Unique identifier for the sale',
+    },
+    {
+      name: 'customer',
+      title: 'Customer',
+      type: 'reference',
+      to: [{type: 'customer'}], // Reference to a customer schema (if exists)
+      description: 'The customer who made the purchase',
+    },
+    {
+      name: 'itemsSold',
+      title: 'Items Sold',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'product',
+              title: 'Product',
+              type: 'reference',
+              to: [{type: 'product'}], // Reference to the product schema
+            },
+            {
+              name: 'quantity',
+              title: 'Quantity',
+              type: 'number',
+              validation: (Rule) => Rule.min(1),
+            },
+            {
+              name: 'price',
+              title: 'Price',
+              type: 'number',
+              description: 'Price of the product at the time of sale',
+            },
+          ],
+        },
+      ],
+      description: 'List of products sold in this transaction',
+    },
+    {
+      name: 'totalAmount',
+      title: 'Total Amount',
+      type: 'number',
+      description: 'Total amount for the sale',
+      validation: (Rule) => Rule.min(0),
+    },
+    {
+      name: 'paymentMethod',
+      title: 'Payment Method',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Credit Card', value: 'credit_card'},
+          {title: 'Debit Card', value: 'debit_card'},
+        ],
+        layout: 'radio',
+      },
+      description: 'Method of payment used in the sale',
+    },
+    {
+      name: 'saleDate',
+      title: 'Sale Date',
+      type: 'datetime',
+      description: 'Date and time of the sale',
+      initialValue: () => new Date().toISOString(),
+    },
+  ],
+})
+
+
+
+
+
+
+
